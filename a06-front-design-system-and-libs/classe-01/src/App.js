@@ -41,7 +41,7 @@ function App() {
 
       setShowAlert(false)
 
-    }, 2000)
+    }, 5000)
 
     return () => {
 
@@ -80,6 +80,7 @@ function App() {
 
       console.log(error)
       setShowAlert(true)
+      setSearchPokemon('')
     }
 
   }
