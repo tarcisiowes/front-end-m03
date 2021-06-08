@@ -4,6 +4,7 @@ import NavBar from './components/navbar'
 import { useState, useEffect } from 'react'
 import SearchItem from './components/searchitem'
 import { useLocalStorage } from 'react-use'
+import CustomAlert from './components/customalert'
 
 
 function App() {
@@ -11,10 +12,12 @@ function App() {
   const [cacheSearch, setCacheSearch, removeCacheSearch ] = useLocalStorage('pokemonSearch', [])
   const [pokemon, setPokemon] = useState({})
   const [searchPokemon, setSearchPokemon] = useState('')
-
+  const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
+
     handleReqToAPI()
+
   }, [])
   
   useEffect(() => {
@@ -31,6 +34,20 @@ function App() {
     setCacheSearch([...cacheSearch, pokemon])
     
   }
+
+  useEffect(() => {
+
+    const timeout = setTimeout(() => {
+
+      setShowAlert(false)
+
+    }, 2000)
+
+    return () => {
+
+      clearTimeout(timeout)
+    }
+  }, [showAlert])
   
   async function handleFindPokemon() {
     
@@ -60,7 +77,9 @@ function App() {
       setPokemon(currentPokemon)
 
     } catch (error) {
+
       console.log(error)
+      setShowAlert(true)
     }
 
   }
@@ -69,7 +88,7 @@ function App() {
 
     <div className="App">
 
-      <NavBar />
+      <NavBar />      
 
       <div className="deck">
 
@@ -78,7 +97,9 @@ function App() {
           abilities={ pokemon.abilities }
           image={ pokemon.image }
         />
-        
+
+        { showAlert && <CustomAlert /> }
+
         <SearchItem
           searchPokemon={ searchPokemon }
           setSearchPokemon={ setSearchPokemon }
