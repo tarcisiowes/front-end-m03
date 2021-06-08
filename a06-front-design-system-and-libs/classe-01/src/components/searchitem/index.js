@@ -1,7 +1,7 @@
 import { TextField, Button } from '@material-ui/core'
 import useStyles from './style'
 
-export default function SearchItem({ searchPokemon, setSearchPokemon, handleReqToAPI }) {
+export default function SearchItem({ searchPokemon, setSearchPokemon, handleFindPokemon }) {
 
   const classes = useStyles()
 
@@ -20,7 +20,7 @@ export default function SearchItem({ searchPokemon, setSearchPokemon, handleReqT
         className={classes.button}
         variant="contained"
         color="secondary"
-        onClick={ handleReqToAPI }        
+        onClick={ handleFindPokemon }        
       >     
               
         Search         

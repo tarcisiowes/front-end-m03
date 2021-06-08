@@ -3,22 +3,51 @@ import CustomCard from './components/deck'
 import NavBar from './components/navbar'
 import { useState, useEffect } from 'react'
 import SearchItem from './components/searchitem'
+import { useLocalStorage } from 'react-use'
+
 
 function App() {
 
+  const [cacheSearch, setCacheSearch, removeCacheSearch ] = useLocalStorage('pokemonSearch', [])
   const [pokemon, setPokemon] = useState({})
-  const [searchPokemon, setSearchPokemon] = useState('pikachu')
+  const [searchPokemon, setSearchPokemon] = useState('')
 
 
   useEffect(() => {
     handleReqToAPI()
-  },[])
+  }, [])
   
+  useEffect(() => {
+
+  }, [pokemon])
+
+  function checkInCache() {
+    
+    cacheSearch.find(item => item.nome === searchPokemon)
+  }
+
+  function saveInCache() {
+    
+    setCacheSearch([...cacheSearch, pokemon])
+    
+  }
+  
+  async function handleFindPokemon() {
+    
+    const result = checkInCache()
+
+    if (result) {
+      return setPokemon(result)
+    }
+
+    await handleReqToAPI()
+  }
+
   async function handleReqToAPI() {
 
     try {
 
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchPokemon}`)
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchPokemon || 'pikachu'}`)
       const { name, sprites: { other }, abilities } = await response.json()
       const { dream_world: {front_default}} = other
       const currentPokemon = {
@@ -53,7 +82,7 @@ function App() {
         <SearchItem
           searchPokemon={ searchPokemon }
           setSearchPokemon={ setSearchPokemon }
-          handleReqToAPI={ handleReqToAPI }          
+          handleFindPokemon={ handleFindPokemon }          
         />        
         
       </div>
