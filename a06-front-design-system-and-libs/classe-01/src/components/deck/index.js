@@ -6,10 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './styles'
 
-
-
-
-export default function CustomCard() {
+export default function CustomCard({ name, abilities, image }) {
 
   const classes = useStyles();
 
@@ -17,19 +14,22 @@ export default function CustomCard() {
       
     <Card className={classes.root}>
         
-      <CardHeader title="Pikachu" className={classes.cardHeader} />
+      <CardHeader title={ name } className={classes.cardHeader} />
       
       <CardMedia
         component='img'
-        image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png"
+        image={ image }
         className={classes.media}
-        title="Pikachu"
+        title={name}
       />
 
       <CardContent>
         
         <Typography variant="h6" > Habilidades </Typography>
         
+        {abilities && abilities.map(skill => (
+          <Typography variant="body2" key={skill.ability.name} color="textSecondary" component="p"> {skill.ability.name} </Typography>
+        ))}
       </CardContent>
           
     </Card>
